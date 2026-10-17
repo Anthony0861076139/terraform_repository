@@ -1,5 +1,5 @@
 resource "aws_db_instance" "liora-db" {
-    allocated storage       = 10
+    allocated_storage       = 10
     db_name                 = "mydb"
     engine                  = "mysql"
     engine_version          = "8.0"
