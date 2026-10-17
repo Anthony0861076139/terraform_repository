@@ -8,5 +8,6 @@ resource "aws_db_instance" "liora-db" {
     password                = var.db_pass  
     parameter_group_name    = "default.mysql8.0"
     skip_final_snapshot     = true 
+    multi_az                = true
 }
 

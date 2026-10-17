@@ -23,15 +23,4 @@ resource "aws_instance" "ec2_public" {
   }
 }
 
-resource "aws_instance" "ec2_private" {
-    ami = data.aws_ami.liora-ami.id
-    instance_type = var.type_instance
-    key_name = var.key_name
-    associate_public_ip_address = false
-    subnet_id = var.vpc.private_subnets[0]
-    vpc_security_group_ids = [var.sg_priv_id]
-
-     tags = {
-    "Name" = "${var.namespace}-EC2-PRIVATE"
-  }
-}
+#No private ec2 instance needed in this exam. the database will be created in rds and a private subnet will be assigned to it
