@@ -12,3 +12,6 @@ variable "db_user" {
     nullable = false
 }
 
+variable "namespace" {
+    type = any
+}

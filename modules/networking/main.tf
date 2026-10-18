@@ -37,6 +37,16 @@ resource "aws_security_group" "allow_ssh_pub" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "allow incoming https traffic"
+    from_port  = 443
+    to_port    = 443
+    protocol   = "tls"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+
   egress {
     description = "allow outgoing traffic to the internet"
     from_port  = 0

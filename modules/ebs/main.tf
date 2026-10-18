@@ -1,8 +1,8 @@
-resource "aws_ebs_volume" "example" {
-  availability_zone = "us-west-2a"
-  size              = 40
-
+resource "aws_ebs_volume" "liora-ebs" {
+  size = 10
+  availability_zone = var.avail_zone_var
   tags = {
-    Name = "Liora-ebs"
+    Name = "${var.namespace}-ebs"
   }
 }
+

@@ -1,6 +1,6 @@
 variable "namespace" {
   type        = string
-  default     = "Liora"
+  default     = "Anthony-TF-Exam"
   description = "L'espace de noms de projet à utiliser pour la dénomination unique des ressources"
 }
 

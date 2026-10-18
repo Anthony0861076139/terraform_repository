@@ -17,6 +17,7 @@ resource "aws_instance" "ec2_public" {
     subnet_id = var.vpc.public_subnets[0]
     vpc_security_group_ids = [var.sg_pub_id]
     user_data = file("install_wordpress.sh")
+    availability_zone = var.avail_zone_var
 
      tags = {
     "Name" = "${var.namespace}-EC2-PUBLIC"
