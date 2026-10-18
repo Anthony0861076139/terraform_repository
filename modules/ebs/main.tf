@@ -6,3 +6,8 @@ resource "aws_ebs_volume" "liora-ebs" {
   }
 }
 
+resource "aws_volume_attachment" "liora_ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.liora-ebs.id
+  instance_id = var.instance_id_var
+}
