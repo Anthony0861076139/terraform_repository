@@ -16,8 +16,12 @@ resource "aws_instance" "ec2_public" {
     associate_public_ip_address = true
     subnet_id = var.vpc.public_subnets[0]
     vpc_security_group_ids = [var.sg_pub_id]
-    user_data = file("install_wordpress.sh")
-
+    user_data = templatefile("install_wordpress.sh", {
+      db_host = var.db_host
+      db_name = var.db_name
+      db_pass = var.db_pass
+      db_user = var.db_user
+    })
      tags = {
     "Name" = "${var.namespace}-EC2-PUBLIC"
   }

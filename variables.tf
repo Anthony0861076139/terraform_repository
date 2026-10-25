@@ -5,12 +5,6 @@ variable "namespace" {
 }
 
 
-variable "region" {
-  description = "AWS région"
-  default     = "eu-west-3"
-  type        = string
-}
-
 variable "db_pass" {
   type = string
   description = "password for database"
@@ -23,4 +17,13 @@ variable "db_user" {
     description = "user name for database"
     sensitive = true
     nullable = false
+}
+
+variable "db_name" {
+  type = string
+  default = "mydb"
+}
+
+variable "authorised_cidrs" {
+    type = list(string)
 }

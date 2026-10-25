@@ -3,13 +3,17 @@ output "vpc" {
 }
 
 output "sg_pub_id" {
-    value = aws_security_group.allow_ssh_pub.id
+    value = aws_security_group.web_security_group.id
 }
 
 output "sg_priv_id" {
-    value = aws_security_group.allow_ssh_priv.id
+    value = aws_security_group.db_security_group.id
 }
 
 output "azs" {
     value = module.vpc.azs
+}
+
+output "db_subnet_group_name" {
+    value = module.vpc.database_subnet_group_name
 }

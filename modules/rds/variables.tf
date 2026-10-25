@@ -15,3 +15,14 @@ variable "db_user" {
 variable "namespace" {
     type = any
 }
+
+
+variable "db_name" {
+    type = any
+}
+
+
+variable "db_subnet_group_name" {
+    type = any
+}
+

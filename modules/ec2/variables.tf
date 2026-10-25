@@ -19,10 +19,29 @@ variable "sg_priv_id" {
     type = any
 }
 
+variable "db_pass" {
+  type = string
+  description = "password for database"
+  sensitive = true
+  nullable = false
+}
+
+variable "db_user" {
+    type = string
+    description = "user name for database"
+    sensitive = true
+    nullable = false
+}
+
 variable "namespace" {
     type = any
 }
 
-variable "avail_zone_var" {
-    type = string
+
+variable "db_name" {
+    type = any
+}
+
+variable "db_host" {
+    type = any
 }
