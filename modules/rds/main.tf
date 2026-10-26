@@ -10,6 +10,8 @@ resource "aws_db_instance" "liora-db" {
   skip_final_snapshot  = true
   multi_az             = true
   db_subnet_group_name = var.db_subnet_group_name
+  vpc_security_group_ids = [var.sg_db_id]
+  apply_immediately      = true
 
   tags = {
     Name = "${var.namespace}-rds"

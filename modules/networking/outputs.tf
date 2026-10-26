@@ -6,7 +6,7 @@ output "sg_pub_id" {
     value = aws_security_group.web_security_group.id
 }
 
-output "sg_priv_id" {
+output "sg_db_id" {
     value = aws_security_group.db_security_group.id
 }
 

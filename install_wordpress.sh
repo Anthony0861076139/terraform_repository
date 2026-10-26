@@ -26,6 +26,7 @@ done
 
 if ! blkid $DEVICE; then            #If the device is not formatted, format it
   mkfs -t ext4 /dev/sdh
+fi
 
 
 mkdir -p /var/www/html
@@ -35,7 +36,7 @@ mount $DEVICE /var/www/html
 #UUID is the devices id so we need to find its id and then add a new line to fstab which is short for "filesystem table"
 #/etc/fstab (short for “filesystem table”) is a text file listing which disks Linux should mount, where, and how. At every boot, 
 #the system reads it and mounts everything listed, so the disks are ready before services like Apache start.
-#Without it, any mount you make with the mount command lasts only until the next reboot. fstab is what makes a mount permanent.'''
+#Without it, any mount you make with the mount command lasts only until the next reboot. fstab is what makes a mount permanent.
 
 UUID=$(blkid -s UUID -o value $DEVICE)
 echo "UUID=$UUID /var/www/html ext4 defaults,nofail 0 2" >> /etc/fstab #update the fstab file to include the devices id as a new line
@@ -48,8 +49,9 @@ echo "UUID=$UUID /var/www/html ext4 defaults,nofail 0 2" >> /etc/fstab #update t
 
 
 # Install Apache HTTP server
-sudo yum install -y httpd wget php-fpm php-mysqli php-json php php-devel
+sudo yum install -y httpd wget php php-fpm php-mysqlnd php-gd php-mbstring php-xml
 # Start Apache &  Enable Apache to start on boot
+systemctl enable --now php-fpm
 sudo systemctl start httpd && sudo systemctl enable httpd
 sudo usermod -a -G apache ec2-user
 # Create a PHP info page
@@ -61,43 +63,6 @@ echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
 
 # Install required PHP modules
 sudo yum install php php-{pear,cgi,common,curl,mbstring,gd,mysqlnd,gettext,bcmath,json,xml,fpm,intl,zip,imap} -y
-
-
-# Start MariaDB & Enable MariaDB to start on boot
-
-sudo systemctl enable --now mariadb
-
-# Install
-sudo yum install expect -y
-
-
-'''
-# Secure the MariaDB installation
-echo "Securing MariaDB installation..."
-expect - <<EOF
-spawn sudo mysql_secure_installation
-expect "Enter current password for root (enter for none):"
-send "\r"
-expect "Switch to unix_socket authentication:"
-send "n\r"
-expect "Change the root password?"
-send "y\r"
-expect "New password:"
-send "$DB_PASSWORD\r"
-expect "Re-enter new password:"
-send "$DB_PASSWORD\r"
-expect "Remove anonymous users?"
-send "y\r"
-expect "Disallow root login remotely?"
-send "y\r"
-expect "Remove test database and access to it?"
-send "y\r"
-expect "Reload privilege tables now?"
-send "y\r"
-expect eof
-EOF
-echo "MariaDB installation secured."
-'''
 
 # Change to the user's home directory
 cd /home/ec2-user
@@ -147,7 +112,7 @@ sed -i "s/username_here/$DB_USER/" wp-config.php
 sed -i "s/password_here/$DB_PASSWORD/" wp-config.php
 
 # Replace database host in the configuration file
-sed -i "s/localhost/localhost/" wp-config.php
+sed -i "s/localhost/$DB_HOST/" wp-config.php
 
 
 # Set appropriate permissions for the web directory (directories)
@@ -155,6 +120,14 @@ sudo find $WORDPRESS_DIR -type d -exec chmod 755 {} \;
 
 # Set appropriate permissions for the web directory (files)
 sudo find $WORDPRESS_DIR -type f -exec chmod 644 {} \;
+
+
+#Set up ssl certificate for https access
+sudo yum install -y mod_ssl
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/localhost.key -out /etc/pki/tls/certs/localhost.crt -subj "/CN=localhost"
+
+
+
 
 # Restart Apache
 sudo systemctl restart httpd

@@ -26,3 +26,6 @@ variable "db_subnet_group_name" {
     type = any
 }
 
+variable "sg_db_id" {
+  type = string
+}

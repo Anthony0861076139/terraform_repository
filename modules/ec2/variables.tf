@@ -15,7 +15,7 @@ variable "sg_pub_id" {
     type = any
 }
 
-variable "sg_priv_id" {
+variable "sg_db_id" {
     type = any
 }
 

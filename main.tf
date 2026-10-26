@@ -26,7 +26,7 @@ module "ec2" {
   namespace       = var.namespace
   vpc             = module.networking.vpc
   sg_pub_id       = module.networking.sg_pub_id
-  sg_priv_id      = module.networking.sg_priv_id
+  sg_db_id        = module.networking.sg_db_id
   key_name        = "Anthony_Liora"
   db_user = var.db_user
   db_pass = var.db_pass
@@ -50,9 +50,14 @@ module "rds" {
   db_pass = var.db_pass
   db_name = var.db_name
   db_subnet_group_name = module.networking.db_subnet_group_name
+  sg_db_id = module.networking.sg_db_id
 }
 
 
 output "wordpress_url" {
   value = "http://${module.ec2.public_ip_var}"
+}
+
+output "db_host" {
+  value = "${module.rds.db_host}"
 }

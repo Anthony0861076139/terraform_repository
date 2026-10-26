@@ -88,7 +88,8 @@ resource "aws_security_group" "db_security_group" {
 
   
 
-  #EC2 ACCESS - THIS GIVES THE WORDPRESS MACHINE ACCESS AND THEREFORE GIVES USERS AND ADMIN ACCESS TO THE DATABASE (nested block of db_security_group)
+#ADMIN ACCESS - THIS GIVES THE WORDPRESS MACHINE ACCESS AND THEREFORE GIVES USERS AND ADMIN ACCESS TO THE DATABASE (nested block of db_security_group)
+  #WEB USER GETS ACCESS VIA WORDPRESS DB QUERIES AND ADMIN USER GETS ACCESS DIRECTLY VIA THE LINUX SHELL VIA MYSQL LOGIN
   ingress {
     description = "MySQL/MariaDB from the web server only"
     from_port  = 3306
@@ -97,13 +98,13 @@ resource "aws_security_group" "db_security_group" {
     security_groups = [aws_security_group.web_security_group.id]
   }
 
-  #RDS DATABASE WEB ACCESS FOR UPDATES ETC...  #nested block of web_security_group
+  #RDS DATABASE WEB ACCESS FOR UPDATES ETC...  #nested block of db_security_group
   egress {
     description = "allow outgoing traffic to the internet"
     from_port  = 0
     to_port    = 0
     protocol   = "-1"
-    cidr_blocks = var.authorised_cidrs #personal vm ip address (others may be added manually)
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
